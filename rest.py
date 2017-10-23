@@ -19,7 +19,7 @@ class User:
         field_names = json_print(rows, cursor)
         cursor.close()
         connection.close()
-        return field_names
+        return field_names + '\n'
 
     def DELETE(self, uuid):
         print uuid
@@ -57,7 +57,7 @@ class Users:
         field_names = json_print(rows, cursor)
         cursor.close()
         connection.close()
-        return field_names
+        return field_names + '\n'
 
     def POST(self):
         connection = pymysql.connect(host='testdb.chvxt94wiqg2.us-east-1.rds.amazonaws.com', port=3306,
