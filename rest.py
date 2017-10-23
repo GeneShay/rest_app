@@ -10,8 +10,8 @@ app = web.application(urls, globals())
 
 class User:
     def GET(self, user):
-        connection = pymysql.connect(host='testdb.chvxt94wiqg2.us-east-1.rds.amazonaws.com', port=3306,
-                                     user='barmaley', password='barmaley', db='test_db')
+        connection = pymysql.connect(host='genetestrds.cg2mxphbjirw.us-west-1.rds.amazonaws.com', port=3306,
+                                     user='GeneTest', password='TestPassword', db='TestDB')
         sql = "SELECT * FROM users WHERE uuid = '%s'" % user
         cursor = connection.cursor()
         cursor.execute(sql)
@@ -23,8 +23,8 @@ class User:
 
     def DELETE(self, uuid):
         print uuid
-        connection = pymysql.connect(host='testdb.chvxt94wiqg2.us-east-1.rds.amazonaws.com', port=3306,
-                                     user='barmaley', password='barmaley', db='test_db')
+        connection = pymysql.connect(host='genetestrds.cg2mxphbjirw.us-west-1.rds.amazonaws.com', port=3306,
+                                     user='GeneTest', password='TestPassword', db='TestDB')
         sql = "DELETE FROM users WHERE uuid = '%s'" % uuid
         cursor = connection.cursor()
         cursor.execute(sql)
@@ -36,8 +36,8 @@ class User:
     def PUT(self, uuid):
         data = json.loads(web.data())
         fn, ln, email = data["first_name"], data["last_name"], data["email"]
-        connection = pymysql.connect(host='testdb.chvxt94wiqg2.us-east-1.rds.amazonaws.com', port=3306,
-                                     user='barmaley', password='barmaley', db='test_db')
+        connection = pymysql.connect(host='genetestrds.cg2mxphbjirw.us-west-1.rds.amazonaws.com', port=3306,
+                                     user='GeneTest', password='TestPassword', db='TestDB')
         sql = "UPDATE users SET first_name = '%s', last_name = '%s', email = '%s' WHERE uuid = '%s'" % (fn, ln, email, uuid)
         cursor = connection.cursor()
         cursor.execute(sql)
@@ -48,8 +48,8 @@ class User:
 
 class Users:
     def GET(self):
-        connection = pymysql.connect(host='testdb.chvxt94wiqg2.us-east-1.rds.amazonaws.com', port=3306,
-                                     user='barmaley', password='barmaley', db='test_db')
+        connection = pymysql.connect(host='genetestrds.cg2mxphbjirw.us-west-1.rds.amazonaws.com', port=3306,
+                                     user='GeneTest', password='TestPassword', db='TestDB')
         sql = "SELECT * FROM users"
         cursor = connection.cursor()
         cursor.execute(sql)
@@ -60,8 +60,8 @@ class Users:
         return field_names + '\n'
 
     def POST(self):
-        connection = pymysql.connect(host='testdb.chvxt94wiqg2.us-east-1.rds.amazonaws.com', port=3306,
-                                     user='barmaley', password='barmaley', db='test_db')
+        connection = pymysql.connect(host='genetestrds.cg2mxphbjirw.us-west-1.rds.amazonaws.com', port=3306,
+                                     user='GeneTest', password='TestPassword', db='TestDB')
         data = json.loads(web.data())
         uuid, fn, ln, email = data["uuid"], data["first_name"], data["last_name"], data["email"]
         user_check = 'SELECT * FROM users WHERE  uuid = "%s"' %uuid
