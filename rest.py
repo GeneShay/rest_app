@@ -8,66 +8,62 @@ urls = (
 )
 app = web.application(urls, globals())
 
+
 class User:
+    connection = pymysql.connect(host='genetestrds.cg2mxphbjirw.us-west-1.rds.amazonaws.com', port=3306,
+                                     user='GeneTest', password='TestPassword', db='TestDB')
     def GET(self, user):
-        connection = pymysql.connect(host='testdb.chvxt94wiqg2.us-east-1.rds.amazonaws.com', port=3306,
-                                     user='barmaley', password='barmaley', db='test_db')
         sql = "SELECT * FROM users WHERE uuid = '%s'" % user
-        cursor = connection.cursor()
+        cursor = self.connection.cursor()
         cursor.execute(sql)
         rows = cursor.fetchall()
         field_names = json_print(rows, cursor)
         cursor.close()
-        connection.close()
+        self.connection.close()
         return field_names
 
     def DELETE(self, uuid):
         print uuid
-        connection = pymysql.connect(host='testdb.chvxt94wiqg2.us-east-1.rds.amazonaws.com', port=3306,
-                                     user='barmaley', password='barmaley', db='test_db')
         sql = "DELETE FROM users WHERE uuid = '%s'" % uuid
-        cursor = connection.cursor()
+        cursor = self.connection.cursor()
         cursor.execute(sql)
-        connection.commit()
+        self.connection.commit()
         cursor.close()
-        connection.close()
+        self.connection.close()
         return 'User with nickname "%s" is removed\n' % uuid
 
     def PUT(self, uuid):
         data = json.loads(web.data())
         fn, ln, email = data["first_name"], data["last_name"], data["email"]
-        connection = pymysql.connect(host='testdb.chvxt94wiqg2.us-east-1.rds.amazonaws.com', port=3306,
-                                     user='barmaley', password='barmaley', db='test_db')
         sql = "UPDATE users SET first_name = '%s', last_name = '%s', email = '%s' WHERE uuid = '%s'" % (fn, ln, email, uuid)
-        cursor = connection.cursor()
+        cursor = self.connection.cursor()
         cursor.execute(sql)
-        connection.commit()
+        self.connection.commit()
         cursor.close()
-        connection.close()
+        self.connection.close()
         return 'User with nickname "%s" is updated\n' % uuid
 
 class Users:
+    connection = pymysql.connect(host='genetestrds.cg2mxphbjirw.us-west-1.rds.amazonaws.com', port=3306,
+                                     user='GeneTest', password='TestPassword', db='TestDB')
     def GET(self):
-        connection = pymysql.connect(host='testdb.chvxt94wiqg2.us-east-1.rds.amazonaws.com', port=3306,
-                                     user='barmaley', password='barmaley', db='test_db')
+        
         sql = "SELECT * FROM users"
-        cursor = connection.cursor()
+        cursor = self.connection.cursor()
         cursor.execute(sql)
         rows = cursor.fetchall()
         field_names = json_print(rows, cursor)
         cursor.close()
-        connection.close()
+        self.connection.close()
         return field_names
 
     def POST(self):
-        connection = pymysql.connect(host='testdb.chvxt94wiqg2.us-east-1.rds.amazonaws.com', port=3306,
-                                     user='barmaley', password='barmaley', db='test_db')
         data = json.loads(web.data())
         uuid, fn, ln, email = data["uuid"], data["first_name"], data["last_name"], data["email"]
         user_check = 'SELECT * FROM users WHERE  uuid = "%s"' %uuid
         add_user = 'INSERT INTO users (uuid, first_name, last_name, email, data) ' \
                    'VALUES ("%s", "%s", "%s","%s", now())' % (uuid, fn, ln, email)
-        cursor = connection.cursor()
+        cursor = self.connection.cursor()
         cursor.execute(user_check)
         rows = cursor.fetchall()
 
@@ -75,14 +71,14 @@ class Users:
         if not rows:
 
             cursor.execute(add_user)
-            connection.commit()
+            self.connection.commit()
             cursor.close()
-            connection.close()
+            self.connection.close()
             
             return 'User "%s" created\n' % uuid
         else:
             cursor.close()
-            connection.close()
+            self.connection.close()
             return 'User with uuid "%s" exists\n' %uuid
 
 
