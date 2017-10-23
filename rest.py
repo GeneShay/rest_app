@@ -100,6 +100,6 @@ def json_print(rows, cursor):
             d[ field_names[5] ] = row[5]
             objects_list.append(d)
         json_string = json.dumps( objects_list, default=json_util.default )
-        return json_string
+        return json_string + '\n'
 if __name__ == "__main__":
     app.run()
